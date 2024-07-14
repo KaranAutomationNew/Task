@@ -1,0 +1,34 @@
+// Describe the expected response shape with JSON Schema
+// https://json-schema.org/
+const expectedSchema = {
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "published": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "title",
+          "author",
+          "published"
+        ]
+      }
+    }
+  }
+};
+
+// Test that the response matches the expected schema using built-in schema verification
+pm.test('response matches JSON schema', () => {
+    pm.response.to.have.jsonSchema(expectedSchema);
+});
