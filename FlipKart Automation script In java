@@ -1,0 +1,67 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class Get {
+		    public static void main(String[] args) {
+		        // Set the path to the ChromeDriver executable
+		        System.setProperty("webdriver.chrome.driver", "place the path of chrome driver");
+
+		        // Initialize ChromeDriver
+		        ChromeOptions options = new ChromeOptions();
+		        options.addArguments("--disable-notifications"); 
+		        WebDriver driver = new ChromeDriver(options);
+
+		        try {
+		            // Open Flipkart
+		            driver.get("https://www.flipkart.com");
+
+		            // Close the login popup (if present)
+		            try {
+		                WebElement closeLoginPopupButton = new WebDriverWait(driver, 10)
+		                        .until(ExpectedConditions.elementToBeClickable(By.cssSelector("button._2KpZ6l._2doB4z")));
+		                closeLoginPopupButton.click();
+		            } catch (Exception e) {
+		                // No popup present, continue
+		            }
+
+		            // Search for a product
+		            WebElement searchBox = driver.findElement(By.name("q"));
+		            searchBox.sendKeys("Laptop");
+		            searchBox.submit();
+
+		            // Wait for search results to load
+		            WebDriverWait wait = new WebDriverWait(driver, 10);
+		            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div._1AtVbE")));
+
+		            // Click on the first product in the search results
+		            WebElement firstProduct = driver.findElement(By.cssSelector("div._1AtVbE > div:nth-child(1)"));
+		            firstProduct.click();
+
+		            // Switch to the product detail page
+		            for (String windowHandle : driver.getWindowHandles()) {
+		                driver.switchTo().window(windowHandle);
+		            }
+
+		            // Wait for product details to load
+		            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button._2KpZ6l._2U9uOA")));
+
+		            // Click on the "Buy Now" button (change the CSS selector if needed)
+		            WebElement buyNowButton = driver.findElement(By.cssSelector("button._2KpZ6l._2U9uOA"));
+		            buyNowButton.click();
+
+		            
+
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        } finally {
+		            // Close the browser
+		            driver.quit();
+		        }
+		    }
+		
+	}
